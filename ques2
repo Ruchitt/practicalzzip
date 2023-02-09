@@ -1,0 +1,38 @@
+- You need to use same database as previously used in practical1.
+- You can create a class for category or copy from previously practical. need to use here for mapping with product
+don't create any UI for crud operation use directly table & records for category)
+- Create a table called Product
+- Consider the below fields for above table
++ ProductId
++ Name
++ Description
++ IsActive
++ Price
++ CategoryId
++ CreatedOn
++ ModifiedOn
++ Quantity
++ image
+
+- You need to perform below task using razor pages
+
++ Create a page & display list of Product.
++ Add a link button for adding new Product
++ List have 3 buttons
+* Edit
+* Delete
+* Active/Inactive (show according current status)
++ Build a page where you need to show Category list with an product under that category (show delete catgory button)
+
+- Catgory & Product both page have option to search by name or description.
+- Product page have separater dropdwon for filter by Category & Category have same product dropdown.
+- Show all the products on same category separate by with links to product details page.
+- Catgory can't be delete if map with any product, alert user to unmap from the map products.
+- On product page, category name must link with the category listing page. so, you need to apply filter by by default when coming from the product page.
+- Create A Separate library for database interaction call DAL (Data Access Level)
+- Use Interface & Repository & use dependency injection to access data on the main project.
+- Create View Model and use View Model at the main project.
+- Don't use entity class directly on main project.
+- Create one folder with name Images and store product image under it.
+- Show proper message on above mentions activities on complete.
+- Use bootstrap class for look & feel.
