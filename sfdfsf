@@ -1,0 +1,13 @@
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = "CookieAuthentication";
+    options.DefaultChallengeScheme = "CookieAuthentication";
+    options.DefaultSignInScheme = "CookieAuthentication";
+    options.DefaultSignOutScheme = "CookieAuthentication";
+}).AddCookie("CookieAuthentication", options =>
+{
+    options.Cookie.Name = "MyAuthCookie";
+    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.Cookie.HttpOnly = true;
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+});
