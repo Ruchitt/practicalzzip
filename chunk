@@ -1,0 +1,36 @@
+ [HttpPost("UploadLargeFile")]
+        [Route("uploadImage")]
+        [Consumes("multipart/form-data")]
+        [RequestFormLimits(MultipartBodyLengthLimit = 2147483648)]
+        [RequestSizeLimit(long.MaxValue)]
+        public async Task<IActionResult> UploadLargeFile(IFormFile file)
+        {
+            var blobName = file.FileName;
+
+            var storageAccount = CloudStorageAccount.Parse(_storageStr);
+            var blobClient = storageAccount.CreateCloudBlobClient();
+            var container = blobClient.GetContainerReference(_blobName);
+            await container.CreateIfNotExistsAsync();
+
+            var blob = container.GetBlockBlobReference(blobName);
+            var fileStream = file.OpenReadStream();
+
+            var bufferSize = 20 * 1024 * 1024; // 100 MB
+            var buffer = new byte[bufferSize];
+            int bytesRead;
+
+            List<string> blockList = new List<string>();
+            var blockId = Guid.NewGuid().ToString();
+            var blockNum = 0;
+
+            while ((bytesRead = fileStream.Read(buffer, 0, bufferSize)) > 0)
+            {
+                var base64BlockId = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{blockId}{blockNum++:0000000}"));
+                await blob.PutBlockAsync(base64BlockId, new MemoryStream(buffer, 0, bytesRead), null);
+                blockList.Add(base64BlockId);
+            }
+
+            await blob.PutBlockListAsync(blockList);
+
+            return Ok("File uploaded successfully.");
+        }
